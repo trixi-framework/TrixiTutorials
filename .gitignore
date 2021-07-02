@@ -1,0 +1,6 @@
+*.png
+**/Manifest.toml
+docs/build
+docs/notebooks
+docs/pages
+docs/assets
