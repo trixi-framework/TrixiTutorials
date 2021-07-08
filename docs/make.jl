@@ -37,8 +37,13 @@ function postprocess_links(content)
         matches = collect(eachmatch(r"\(https://[^\(\)]+\)", content))
         for i in 1:length(matches)
             link = string(chop(matches[i].match, head=1, tail=1))
-            @info "" link
-            # TODO
+            try 
+                HTTP.get(link, retry=false, connect_timeout=10)
+            catch
+                # error("URL doesn't exist: ", link)
+                @warn "URL doesn't exist: " link
+            end
+            # TODO: For now, the nbviewer link don't work, because the notebook files are not pushed (manually or automically).
         end
     end
     return content
@@ -60,7 +65,7 @@ nbviewer_badge = string("# [![](", nbviewer_logo, ")](", nbviewer_url, ")")
 pages = ["Introduction" => "index.md"]
 # Generate markdown for index.jl
 function preprocess_docs(content)
-    return string("# ## Welcome to the tutorials of Trixi.jl", "\n", binder_badge, "\n", nbviewer_badge, "\n\n",
+    return string("# ## Welcome to TrixiTutorials", "\n", binder_badge, "\n", nbviewer_badge, "\n\n",
                   preprocess_links(content))
 end
 Literate.markdown(joinpath(repo_src,"index.jl"), pages_dir; name="index", documenter=false,
@@ -119,8 +124,8 @@ makedocs(
     strict = true # to make the GitHub action fail when doctests fail, see https://github.com/neuropsychology/Psycho.jl/issues/34
 )
 
-# deploydocs(
-#     repo = "github.com/bennibolm/Trixi.jl.git",
-#     push_preview = true,
-#     deploy_config = deployconfig,
-# )
+deploydocs(
+    repo = "github.com/trixi-framework/TrixiTutorials.jl.git",
+    devbranch = "main",
+    # push_preview = true,
+)
