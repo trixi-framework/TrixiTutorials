@@ -222,8 +222,6 @@ plot(k_values, energy_at_final_time.(k_values), label="Energy");
 # We can compute the discrete derivative of the energy at the final time with respect to the wave
 # number `k` as follows.
 ## advection_differentiate_simulation
-# @info "" ForwardDiff.derivative(energy_at_final_time, 1.0)
-# @info "" typeof(ForwardDiff.derivative(energy_at_final_time, 1.0))
 round(ForwardDiff.derivative(energy_at_final_time, 1.0), sigdigits=2)
 #md ## 1.4e-5
 
