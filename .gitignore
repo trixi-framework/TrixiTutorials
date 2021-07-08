@@ -1,4 +1,4 @@
-*.png
+**/pages/*.png
 **/Manifest.toml
 docs/build
 docs/notebooks
