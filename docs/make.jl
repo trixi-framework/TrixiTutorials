@@ -17,11 +17,8 @@ files = [
 
 repo_src        = joinpath(@__DIR__, "..", "src")
 
-pages_dir       = joinpath(@__DIR__, "pages")
-notebooks_dir   = joinpath(@__DIR__, "notebooks")
-
-assets_src = joinpath(@__DIR__, "assets")
-assets_dst = joinpath(@__DIR__, "pages", "assets")
+pages_dir       = joinpath(@__DIR__, "src", "pages")
+notebooks_dir   = joinpath(@__DIR__, "src", "notebooks")
 
 Sys.rm(pages_dir;       recursive=true, force=true)
 Sys.rm(notebooks_dir;   recursive=true, force=true)
@@ -61,8 +58,8 @@ nbviewer_logo = "https://img.shields.io/badge/show-nbviewer-579ACA.svg"
 # binder_url = joinpath("@__BINDER_ROOT_URL__","notebooks")
 # nbviewer_url = joinpath("@__NBVIEWER_ROOT_URL__","notebooks")
 
-binder_url = joinpath("https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials.jl/filepath=docs/notebooks/")
-nbviewer_url = joinpath("https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials.jl/docs/notebooks/")
+binder_url = joinpath("https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials.jl/gh-pages?filepath=dev/notebooks/")
+nbviewer_url = joinpath("https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials.jl/gh-pages/dev/notebooks/")
 
 binder_badge = string("# [![](", binder_logo, ")](", binder_url, ")")
 nbviewer_badge = string("# [![](", nbviewer_logo, ")](", nbviewer_url, ")")
@@ -71,10 +68,10 @@ nbviewer_badge = string("# [![](", nbviewer_logo, ")](", nbviewer_url, ")")
 pages = ["Introduction" => "index.md"]
 # Generate markdown for index.jl
 function preprocess_docs(content)
-    return string("# ## Welcome to TrixiTutorials", "\n", binder_badge, "\n", nbviewer_badge, "\n\n",
+    return string("# # TrixiTutorials.jl", "\n", binder_badge, "\n", nbviewer_badge, "\n\n",
                   preprocess_links(content))
 end
-Literate.markdown(joinpath(repo_src,"index.jl"), pages_dir; name="index", documenter=false,
+Literate.markdown(joinpath(repo_src, "index.jl"), joinpath(pages_dir, ".."); name="index", documenter=false,
                   execute=true, preprocess=preprocess_docs, postprocess=postprocess_links)
 # TODO: With `documenter=false` there is no `link to source` in html file. With `true` the link is not defined because of some `<unkown>`.
 
@@ -106,10 +103,8 @@ for (i, (title, filename)) in enumerate(files)
                       execute=true, preprocess=preprocess_docs, postprocess=postprocess_links)
 
     # Add to navigation menu
-    push!(pages, (title => markdown_filename))
+    push!(pages, (title => joinpath("pages", markdown_filename)))
 end
-
-Sys.cp(assets_src, assets_dst)
 
 # Create documentation with Documenter.jl
 makedocs(
@@ -125,7 +120,6 @@ makedocs(
         canonical = "https://github.com/trixi-framework/TrixiTutorials.jl/stable"
     ),
     # Explicitly specify documentation structure
-    source  = "pages",
     pages = pages,
     strict = true # to make the GitHub action fail when doctests fail, see https://github.com/neuropsychology/Psycho.jl/issues/34
 )

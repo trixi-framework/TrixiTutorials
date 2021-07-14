@@ -1,5 +1,5 @@
-**/pages/*.png
 **/Manifest.toml
 docs/build
-docs/notebooks
-docs/pages
+docs/src/notebooks
+docs/src/pages
+docs/src/index.md
