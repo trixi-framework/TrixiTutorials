@@ -4,11 +4,15 @@ using Literate
 import Pkg
 using Trixi
 
+# Switch variable if documentation should be build if URLs are not valid.
+# TODO: For now, the nbviewer links don't work, because the notebook files
+# are not pushed (manually or automically).
+switch = true
+
 # Creating tutorials for these files:
 files = [
     "Adding a new equation" => "adding_a_new_equation.jl",
     "Differentiable programming" => "differentiable_programming.jl",
-    # "Testing" => "testing_repository.jl",
     ]
 
 repo_src        = joinpath(@__DIR__, "..", "src")
@@ -16,7 +20,7 @@ repo_src        = joinpath(@__DIR__, "..", "src")
 pages_dir       = joinpath(@__DIR__, "pages")
 notebooks_dir   = joinpath(@__DIR__, "notebooks")
 
-assets_src = joinpath(@__DIR__, "..", "assets")
+assets_src = joinpath(@__DIR__, "assets")
 assets_dst = joinpath(@__DIR__, "pages", "assets")
 
 Sys.rm(pages_dir;       recursive=true, force=true)
@@ -40,10 +44,12 @@ function postprocess_links(content)
             try 
                 HTTP.get(link, retry=false, connect_timeout=10)
             catch
-                # error("URL doesn't exist: ", link)
-                @warn "URL doesn't exist: " link
+                if switch
+                    @warn "URL doesn't exist: " link
+                else 
+                    error("URL doesn't exist: ", link)
+                end
             end
-            # TODO: For now, the nbviewer link don't work, because the notebook files are not pushed (manually or automically).
         end
     end
     return content
@@ -114,7 +120,7 @@ makedocs(
         # Disable pretty URLs during manual testing
         prettyurls = get(ENV, "CI", nothing) == "true",
         # Explicitly add favicon as asset
-        # assets = ["assets/favicon.ico"],
+        assets = ["assets/favicon.ico"],
         # Set canonical URL to GitHub pages URL
         canonical = "https://github.com/trixi-framework/TrixiTutorials.jl/stable"
     ),
@@ -125,7 +131,7 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/trixi-framework/TrixiTutorials.jl.git",
+    repo = "github.com/trixi-framework/TrixiTutorials.jl",
     devbranch = "main",
     # push_preview = true,
 )
