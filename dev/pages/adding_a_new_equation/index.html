@@ -93,21 +93,21 @@ summary_callback()</code></pre><pre><code class="nohighlight">
  ──────────────────────────────────────────────────────────────────────────────
             Trixi.jl                   Time                   Allocations      
                                ──────────────────────   ───────────────────────
-       Tot / % measured:            237ms / 100%            4.78MiB / 100%     
+       Tot / % measured:            235ms / 100%            4.78MiB / 100%     
 
  Section               ncalls     time   %tot     avg     alloc   %tot      avg
  ──────────────────────────────────────────────────────────────────────────────
- rhs!                      58    236ms   100%  4.07ms   4.78MiB  100%   84.3KiB
-   ~rhs!~                  58    236ms   100%  4.07ms   4.78MiB  100%   84.3KiB
-   volume integral         58   20.2μs  0.01%   348ns     0.00B  0.00%    0.00B
-   interface flux          58   9.90μs  0.00%   171ns     0.00B  0.00%    0.00B
-   prolong2interfaces      58   7.60μs  0.00%   131ns     0.00B  0.00%    0.00B
-   Jacobian                58   5.20μs  0.00%  89.7ns     0.00B  0.00%    0.00B
-   surface integral        58   4.60μs  0.00%  79.3ns     0.00B  0.00%    0.00B
-   reset ∂u/∂t             58   3.40μs  0.00%  58.6ns     0.00B  0.00%    0.00B
+ rhs!                      58    235ms   100%  4.05ms   4.78MiB  100%   84.3KiB
+   ~rhs!~                  58    235ms   100%  4.05ms   4.78MiB  100%   84.3KiB
+   volume integral         58   18.9μs  0.01%   326ns     0.00B  0.00%    0.00B
+   interface flux          58   8.80μs  0.00%   152ns     0.00B  0.00%    0.00B
+   prolong2interfaces      58   7.20μs  0.00%   124ns     0.00B  0.00%    0.00B
+   surface integral        58   5.50μs  0.00%  94.8ns     0.00B  0.00%    0.00B
+   Jacobian                58   4.50μs  0.00%  77.6ns     0.00B  0.00%    0.00B
+   prolong2boundaries      58   3.70μs  0.00%  63.8ns     0.00B  0.00%    0.00B
+   reset ∂u/∂t             58   3.30μs  0.00%  56.9ns     0.00B  0.00%    0.00B
+   boundary flux           58   3.20μs  0.00%  55.2ns     0.00B  0.00%    0.00B
    source terms            58   3.10μs  0.00%  53.4ns     0.00B  0.00%    0.00B
-   prolong2boundaries      58   3.00μs  0.00%  51.7ns     0.00B  0.00%    0.00B
-   boundary flux           58   2.50μs  0.00%  43.1ns     0.00B  0.00%    0.00B
  ──────────────────────────────────────────────────────────────────────────────
 
 </code></pre><p>That&#39;s it, you ran your first simulation using your new equation with Trixi! Now, we can plot the solution at the final time using Plots.jl.</p><pre><code class="language-julia">using Plots
@@ -129,4 +129,4 @@ semi = remake(semi, solver=DGSEM(3, flux_godunov, VolumeIntegralFluxDifferencing
 ode = semidiscretize(semi, (0.0, 0.5))
 sol = solve(ode, SSPRK43(),
             save_everystep=false, callback=callbacks, maxiters=1e5);
-plot(sol)</code></pre><p><img src="../2702196994.png" alt/></p><p>Possible next steps could be</p><ul><li>to define <code>Trixi.max_abs_speeds(u, equations::CubicEquation) = 3 * u[1]^2</code> to use CFL_based time step control via a <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.StepsizeCallback"><code>(StepsizeCallback)</code></a></li><li>to define quantities of interest like <code>Trixi.entropy(u, equations::CubicEquation) = u[1]^2</code> and integrate them in a simulation using the <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.AnalysisCallback"><code>(AnalysisCallback)</code></a></li><li>to experiment with shock-capturing volume integrals <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.VolumeIntegralShockCapturingHG"><code>(VolumeIntegralShockCapturingHG)</code></a> and adaptive mesh refinement <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.AMRCallback"><code>(AMRCallback)</code></a></li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Introduction</a><a class="docs-footer-nextpage" href="../differentiable_programming/">Differentiable programming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.3 on <span class="colophon-date" title="Wednesday 14 July 2021 12:50">Wednesday 14 July 2021</span>. Using Julia version 1.6.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plot(sol)</code></pre><p><img src="../2702196994.png" alt/></p><p>Possible next steps could be</p><ul><li>to define <code>Trixi.max_abs_speeds(u, equations::CubicEquation) = 3 * u[1]^2</code> to use CFL_based time step control via a <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.StepsizeCallback"><code>(StepsizeCallback)</code></a></li><li>to define quantities of interest like <code>Trixi.entropy(u, equations::CubicEquation) = u[1]^2</code> and integrate them in a simulation using the <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.AnalysisCallback"><code>(AnalysisCallback)</code></a></li><li>to experiment with shock-capturing volume integrals <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.VolumeIntegralShockCapturingHG"><code>(VolumeIntegralShockCapturingHG)</code></a> and adaptive mesh refinement <a href="https://trixi-framework.github.io/Trixi.jl/v0.3.47/reference-trixi/#Trixi.AMRCallback"><code>(AMRCallback)</code></a></li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Introduction</a><a class="docs-footer-nextpage" href="../differentiable_programming/">Differentiable programming »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.3 on <span class="colophon-date" title="Thursday 15 July 2021 14:06">Thursday 15 July 2021</span>. Using Julia version 1.6.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
