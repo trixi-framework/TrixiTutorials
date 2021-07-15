@@ -5,8 +5,6 @@ import Pkg
 using Trixi
 
 # Switch variable if documentation should be build if URLs are not valid.
-# TODO: For now, the nbviewer links don't work, because the notebook files
-# are not pushed (manually or automically).
 switch = true
 
 # Creating tutorials for these files:
@@ -55,11 +53,12 @@ end
 binder_logo = "https://mybinder.org/badge_logo.svg"
 nbviewer_logo = "https://img.shields.io/badge/show-nbviewer-579ACA.svg"
 
-# binder_url = joinpath("@__BINDER_ROOT_URL__","notebooks")
-# nbviewer_url = joinpath("@__NBVIEWER_ROOT_URL__","notebooks")
+binder_url = joinpath("@__BINDER_ROOT_URL__","dev/notebooks")
+@info "" binder_url
+# nbviewer_url = joinpath("@__NBVIEWER_ROOT_URL__","dev/notebooks")
 
-binder_url = joinpath("https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials.jl/gh-pages?filepath=dev/notebooks/")
-nbviewer_url = joinpath("https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials.jl/gh-pages/dev/notebooks/")
+binder_url = joinpath("https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/")
+nbviewer_url = joinpath("https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/")
 
 binder_badge = string("# [![](", binder_logo, ")](", binder_url, ")")
 nbviewer_badge = string("# [![](", nbviewer_logo, ")](", nbviewer_url, ")")
@@ -117,7 +116,7 @@ makedocs(
         # Explicitly add favicon as asset
         assets = ["assets/favicon.ico"],
         # Set canonical URL to GitHub pages URL
-        canonical = "https://github.com/trixi-framework/TrixiTutorials.jl/stable"
+        canonical = "https://trixi-framework.github.io/TrixiTutorials/stable"
     ),
     # Explicitly specify documentation structure
     pages = pages,
