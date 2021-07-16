@@ -13,7 +13,7 @@ files = [
     "Differentiable programming" => "differentiable_programming.jl",
     ]
 
-repo_src        = joinpath(@__DIR__, "..", "src")
+repo_src        = joinpath(@__DIR__, "src", "files")
 
 pages_dir       = joinpath(@__DIR__, "src", "pages")
 notebooks_dir   = joinpath(@__DIR__, "src", "notebooks")

@@ -31,6 +31,7 @@ end; # module
 # From here on, the following code snippets normally are written inside the `module`.
 # To make this work outside `CubicConservationLaw.CubicEquation` is used instead of `CubicEquation`.
 # The complete code can be found at the end.
+#src # TODO complete code at the end?
 # Next, we define the physical flux `f(u) = u^3` using the calling structure
 # used in Trixi.jl.
 
