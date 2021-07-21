@@ -71,7 +71,7 @@ pages = []
 
 # Generate markdown for index.jl
 Literate.markdown(joinpath(repo_src, "index.jl"), joinpath(pages_dir, ".."); execute=true, preprocess=preprocess_links,)
-push!(pages, ("Home" => "index.md"))
+push!(pages, ("Introduction" => "index.md"))
 
 # Create markdown and notebook files for tutorials.
 for (i, (title, filename)) in enumerate(files)
@@ -81,14 +81,14 @@ for (i, (title, filename)) in enumerate(files)
         for j in 1:length(filename)
             create_files("Tutorial $i.$j: $title: $(filename[j][1])", filename[j][2][2]; folder=filename[j][2][1])
 
-            push!(vector, "Tut $i.$j: $(filename[j][1])" => joinpath("pages", "$(filename[j][2][1])/$(splitext(filename[j][2][2])[1]).md"))
+            push!(vector, "$i.$j $(filename[j][1])" => joinpath("pages", "$(filename[j][2][1])/$(splitext(filename[j][2][2])[1]).md"))
         end
         # Add to navigation menu
-        push!(pages, ("Tut $i: $title" => vector))
+        push!(pages, ("$i $title" => vector))
     else # Single files
         create_files("Tutorial $i: $title", filename)
         # Add to navigation menu
-        push!(pages, ("Tut $i: $title" => joinpath("pages", "$(splitext(filename)[1]).md")))
+        push!(pages, ("$i $title" => joinpath("pages", "$(splitext(filename)[1]).md")))
     end
 end
 
