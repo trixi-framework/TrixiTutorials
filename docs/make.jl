@@ -1,5 +1,4 @@
 using Documenter
-using HTTP
 using Literate
 import Pkg
 using Trixi
