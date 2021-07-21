@@ -22,8 +22,7 @@ function create_files(title, file; folder="")
     function preprocess_docs(content)
         return string("# # $title\n $binder_badge\n $nbviewer_badge\n $download_badge\n\n", preprocess_links(content))
     end
-    Literate.markdown(joinpath(repo_src, folder, file), joinpath(pages_dir, folder); documenter=false,
-                      execute=true, preprocess=preprocess_docs,)
+    Literate.markdown(joinpath(repo_src, folder, file), joinpath(pages_dir, folder); execute=true, preprocess=preprocess_docs,)
 
 end
 
@@ -72,9 +71,7 @@ download_url = "https://raw.githubusercontent.com/trixi-framework/TrixiTutorials
 pages = []
 
 # Generate markdown for index.jl
-Literate.markdown(joinpath(repo_src, "index.jl"), joinpath(pages_dir, ".."); execute=true,
-                  preprocess=preprocess_links,)
-# TODO: With `documenter=false` there is no `link to source` in html file. With `true` the link is not defined because of some `<unkown>`.
+Literate.markdown(joinpath(repo_src, "index.jl"), joinpath(pages_dir, ".."); execute=true, preprocess=preprocess_links,)
 push!(pages, ("Home" => "index.md"))
 
 # Create markdown and notebook files for tutorials.
