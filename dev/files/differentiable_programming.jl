@@ -21,7 +21,7 @@
 
 #src # euler_eigenvalues
 using Trixi, LinearAlgebra, Plots
-#
+#-
 equations = CompressibleEulerEquations2D(1.4);
 
 solver = DGSEM(3, flux_central);
@@ -31,20 +31,19 @@ mesh = TreeMesh((-1.0, -1.0), (1.0, 1.0), initial_refinement_level=2, n_cells_ma
 semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_density_wave, solver);
 
 J = jacobian_ad_forward(semi);
-#
+
 size(J)
-#
-#md (1024, 1024)
-#
+#md ## (1024, 1024)
+#-
 λ = eigvals(J);
 
 scatter(real.(λ), imag.(λ));
 
 3.0e-10 < maximum(real, λ) / maximum(abs, λ) < 8.0e-10
-#md true
-# 
+#md ## true
+#-
 1.0e-7 < maximum(real, λ) < 5.0e-7
-#md true
+#md ## true
 
 # Interestingly, if we add dissipation by switching to the `flux_lax_friedrichs` at the interfaces,
 # the maximal real part of the eigenvalues increases.
@@ -59,12 +58,12 @@ J = jacobian_ad_forward(semi);
 λ = eigvals(J);
 
 scatter!(real.(λ), imag.(λ));
-# 
+
 λ = eigvals(J); round(maximum(real, λ) / maximum(abs, λ), sigdigits=2)
-#md 2.1e-5
-# 
+#md ## 2.1e-5
+#-
 round(maximum(real, λ), sigdigits=2)
-#md 0.0057
+#md ## 0.0057
 
 # However, we should be careful when using this analysis, since the eigenvectors are not necessarily
 # well-conditioned.
@@ -73,7 +72,7 @@ round(maximum(real, λ), sigdigits=2)
 λ, V = eigen(J);
 
 round(cond(V), sigdigits=2)
-#md 1.8e6
+#md ## 1.8e6
 
 # In one space dimension, the situation is a bit different.
 
@@ -89,19 +88,19 @@ semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_density_w
 J = jacobian_ad_forward(semi);
 
 λ = eigvals(J);
-# 
+
 scatter(real.(λ), imag.(λ));
-# 
+
 1.0e-16 < maximum(real, λ) / maximum(abs, λ) < 6.0e-16
-#md true
-# 
+#md ## true
+#-
 1.0e-12 < maximum(real, λ) < 6.0e-12
-#md true
-# 
+#md ## true
+#-
 λ, V = eigen(J);
 
 200 < cond(V) < 300
-#md true
+#md ## true
 
 # If we add dissipation, the maximal real part is still approximately zero.
 
@@ -113,21 +112,21 @@ semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_density_w
 J = jacobian_ad_forward(semi);
 
 λ = eigvals(J);
-# 
+
 scatter!(real.(λ), imag.(λ));
-# 
+
 λ = eigvals(J);
 
 1.0e-18 < maximum(real, λ) / maximum(abs, λ) < 1.0e-16
-#md true
-# 
+#md ## true
+#-
 5.0e-14 < maximum(real, λ) < 7.0e-13
-#md true
-# 
+#md ## true
+#-
 λ, V = eigen(J);
 
 90_000 < cond(V) < 100_000
-#md true
+#md ## true
 
 # Note that the condition number of the eigenvector matrix increases but is still smaller than for the
 # example in 2D.
@@ -143,19 +142,20 @@ scatter!(real.(λ), imag.(λ));
 
 #src # euler_gamma_gradient
 using Trixi, LinearAlgebra, ForwardDiff
-# 
+#-
 equations = CompressibleEulerEquations2D(1.4);
 
 mesh = TreeMesh((-1.0, -1.0), (1.0, 1.0), initial_refinement_level=2, n_cells_max=10^5);
 
 solver = DGSEM(3, flux_lax_friedrichs, VolumeIntegralFluxDifferencing(flux_ranocha));
 
-semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_isentropic_vortex, solver);
-# 
+semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_isentropic_vortex, solver)
+#-
 u0_ode = compute_coefficients(0.0, semi);
+
 size(u0_ode)
 #md ## (1024,)
-# 
+#-
 J = ForwardDiff.jacobian((du_ode, γ) -> begin
         equations_inner = CompressibleEulerEquations2D(first(γ))
         semi_inner = Trixi.remake(semi, equations=equations_inner, uEltype=eltype(γ));
@@ -206,11 +206,12 @@ function energy_at_final_time(k) # k is the wave number of the initial condition
     Trixi.integrate(energy_total, sol.u[end], semi)
 end
 #md ## energy_at_final_time (generic function with 1 method)
-
+#-
 k_values = range(0.9, 1.1, length=101)
 #md ## 0.9:0.002:1.1
-# 
-plot(k_values, energy_at_final_time.(k_values), label="Energy");
+#-
+plot(k_values, energy_at_final_time.(k_values), label="Energy")
+#md # ![tutorial_totalenergy](https://user-images.githubusercontent.com/74359358/126673315-15fc87a9-d236-4216-876f-5f1d3219595a.png)
 
 # You should see a plot of a curve that resembles a parabola with local maximum around `k = 1.0`.
 # Why's that? Well, the domain is fixed but the wave number changes. Thus, if the wave number is
@@ -221,7 +222,8 @@ plot(k_values, energy_at_final_time.(k_values), label="Energy");
 
 # We can compute the discrete derivative of the energy at the final time with respect to the wave
 # number `k` as follows.
-## advection_differentiate_simulation
+
+#src # advection_differentiate_simulation
 round(ForwardDiff.derivative(energy_at_final_time, 1.0), sigdigits=2)
 #md ## 1.4e-5
 
@@ -231,7 +233,7 @@ round(ForwardDiff.derivative(energy_at_final_time, 1.0), sigdigits=2)
 #src # advection_differentiate_simulation
 dk_values = ForwardDiff.derivative.((energy_at_final_time,), k_values);
 
-plot(k_values, dk_values, label="Derivative");
+plot(k_values, dk_values, label="Derivative")
 
 # If you remember basic calculus, a sufficient condition for a local maximum is that the first derivative
 # vanishes and the second derivative is negative. We can also check this discretely.
@@ -288,7 +290,7 @@ solver = DGSEM(3, flux_lax_friedrichs)
 initial_condition = (x, t, equation) -> begin
     x_trans = Trixi.x_trans_periodic_2d(x - equation.advectionvelocity * t)
     return SVector(sinpi(k * sum(x_trans)))
-end;
+end
 # as a closure capturing the wave number `k` passed to `energy_at_final_time`.
 # If you call `energy_at_final_time(1.0)`, `k` will be a `Float64`. Thus, the
 # return values of `initial_condition` will be `SVector`s of `Float64`s. When
@@ -324,7 +326,6 @@ Trixi.integrate(energy_total, sol.u[end], semi)
 # sine wave as initial condition, solve the ODE, and plot the resulting uncertainties
 # in the primitive variables.
 
-#src # output = false
 using Trixi, OrdinaryDiffEq, Measurements, Plots, LaTeXStrings
 
 equations = LinearScalarAdvectionEquation1D(1.0 ± 0.1);
@@ -341,12 +342,10 @@ ode = semidiscretize(semi, (0.0, 1.5));
 sol = solve(ode, BS3(), save_everystep=false);
 
 plot(sol)
-# 
+#md # ![tutorial_measurements1](https://user-images.githubusercontent.com/12693098/114027260-78ca8300-9877-11eb-88d4-f93c9bc55d0b.png)
+#src # ![tutorial_measurements1b](https://user-images.githubusercontent.com/74359358/126673421-f818d8e9-9968-435e-9008-598ed52e4d21.png)
 
-#src # output
-#src # Plot{Plots.GRBackend() n=1}
-
-# You should see a plot like the following, where small error bars are shown around
+# You should see a plot like this, where small error bars are shown around
 # the extrema and larger error bars are shown in the remaining parts. This result
 # is in accordance with expectations. Indeed, the uncertain propagation speed will
 # affect the extrema less since the local variation of the solution is relatively
@@ -356,9 +355,6 @@ plot(sol)
 
 # All this is possible due to allowing generic types and having good abstractions
 # in Julia that allow packages to work together seamlessly.
-
-# ![tutorial_measurements1](https://user-images.githubusercontent.com/12693098/114027260-78ca8300-9877-11eb-88d4-f93c9bc55d0b.png)
-
 
 
 # ## Finite difference approximations
@@ -384,7 +380,6 @@ round(norm(J_fd - J_ad) / size(J_fd, 1), sigdigits=2)
 #md ## 6.7e-7
 
 # This discrepancy is of the expected order of magnitude for central finite difference approximations.
-
 
 
 # ## Linear systems
@@ -417,7 +412,7 @@ A, b = linear_structure(semi);
 
 size(A), size(b)
 #md ## ((256, 256), (256,))
-# 
+#-
 λ = eigvals(Matrix(A));
 
 scatter(real.(λ), imag.(λ));
