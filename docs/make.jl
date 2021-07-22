@@ -15,13 +15,13 @@ function create_files(title, file; folder="")
     function preprocess_notebook(content)
         return string("# # $title\n\n", preprocess_links(content))
     end
-    Literate.notebook(joinpath(repo_src, folder, file), joinpath(notebooks_dir, folder); preprocess=preprocess_notebook,)
+    Literate.notebook(joinpath(repo_src, folder, file), joinpath(notebooks_dir, folder); preprocess=preprocess_notebook, credit=false)
 
     # Generate markdowns
     function preprocess_docs(content)
         return string("# # $title\n $binder_badge\n $nbviewer_badge\n $download_badge\n\n", preprocess_links(content))
     end
-    Literate.markdown(joinpath(repo_src, folder, file), joinpath(pages_dir, folder); execute=true, preprocess=preprocess_docs,)
+    Literate.markdown(joinpath(repo_src, folder, file), joinpath(pages_dir, folder); execute=false, codefence="```julia" => "```", preprocess=preprocess_docs,)
 
 end
 
