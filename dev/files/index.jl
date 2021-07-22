@@ -1,14 +1,22 @@
 # # Tutorials für Trixi.jl
 
-# Here, TrixiTutorials - a new feature of [trixi-framework](https://github.com/trixi-framework) - will occur soon.
-# It will contain a tutorial section for Trixi.jl with interactive step-by-step explanations via [Binder](https://mybinder.org).
-# Since we will reset the repository history before the official start, please be aware of possible changes in the code and URLs.
+# This repository contains a tutorial section for [Trixi.jl](https://github.com/trixi-framework/Trixi.jl),
+# with interactive step-by-step explanations via [Binder](https://mybinder.org).
 
-# We are working on it.
+#md # Right now, you are using the classic documentation. The corresponding notebooks can be viewed in
+#md # [nbviewer](https://nbviewer.jupyter.org/) and opened in [Binder](https://mybinder.org/) via the respective link.
+    
+# There are tutorials for the following topics:
+# - Adding a new equation:
+#   [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/adding_a_new_equation.ipynb)
+#   [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/adding_a_new_equation.ipynb)
+# In this tutorial, it is explained how a new equation can be added using the example of the cubic conservation law.
+# First, the equation is defined using a `struct` `CubicEquation` and the physical flux. Then, the corresponding
+# standard setup in Trixi.jl (`mesh`, `solver`, `semi` and `ode`) is build and the ODE problem is solved by OrdinaryDiffEq's `solve` method.
 
-#src Working with somebody else's code often is hard in the beginning. To simplify the start looking into an example might help. It is even more helpful if you can run the example by yourself and see what single lines or some commands will do.
-#src So, in this tutorial section you have the possibility to do exactly this.
-#src There are three ways to use these tutorials:
-#src - If you have not much time or just want to look quickly in the example, you can use the documentation page. 
-#src - For a deeper look there is a not interactive way with `nbviewer` where the code is already executed.
-#src - To take full advantage you can use the interactive notebook version of the tutorials where you can run the code by yourself. To get there just click on the `binder` logo within the corresponding tutorial.
+# - Differentiable programming:
+#   [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/differentiable_programming.ipynb)
+#   [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/differentiable_programming.ipynb)
+# This part deals with some basic differentiable programming topics. For example, a Jacobian, its eigenvalues and
+# a curve of total energy (through the simulation) are calculated and plotted for a few semidiscretizations.
+# Moreover, an example for propagating errors with Measurement.jl is given at the end.
