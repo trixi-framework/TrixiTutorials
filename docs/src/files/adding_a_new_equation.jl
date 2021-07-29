@@ -22,7 +22,7 @@ struct CubicEquation <: Trixi.AbstractEquations{1 #= number of spatial dimension
                                                 1 #= number of primary variables, i.e. scalar =#};
 end
   
-end # module
+end; # module
   
 # We create `CubicEquation` as an empty `struct` since we do not use any parameters
 # for this equation. Other models could bundle arbitrary parameters, e.g., the
