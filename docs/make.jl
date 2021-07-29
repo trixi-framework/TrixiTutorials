@@ -19,7 +19,7 @@ function create_files(title, file; folder="")
 
     # Generate markdowns
     function preprocess_docs(content)
-        return string("# # $title\n $binder_badge\n $nbviewer_badge\n $download_badge\n\n", preprocess_links(content))
+        return string("# # [$title](@id $(splitext(file)[1]))\n $binder_badge\n $nbviewer_badge\n $download_badge\n\n", preprocess_links(content))
     end
     Literate.markdown(joinpath(repo_src, folder, file), joinpath(pages_dir, folder); execute=false, codefence="```julia" => "```", preprocess=preprocess_docs,)
 
@@ -66,12 +66,10 @@ binder_url   = "https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pag
 nbviewer_url = "https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/"
 download_url = "https://raw.githubusercontent.com/trixi-framework/TrixiTutorials/gh-pages/dev/notebooks/"
 
-# Navigation system for makedocs
-pages = []
-
 # Generate markdown for index.jl
 Literate.markdown(joinpath(repo_src, "index.jl"), joinpath(pages_dir, ".."); execute=true, preprocess=preprocess_links,)
-push!(pages, ("Introduction" => "index.md"))
+# Navigation system for makedocs
+pages = Any["Introduction" => "index.md"]
 
 # Create markdown and notebook files for tutorials.
 for (i, (title, filename)) in enumerate(files)
