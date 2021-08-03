@@ -33,17 +33,14 @@ semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_density_w
 J = jacobian_ad_forward(semi);
 
 size(J)
-#md ## (1024, 1024)
 #-
 λ = eigvals(J);
 
 scatter(real.(λ), imag.(λ));
 
 3.0e-10 < maximum(real, λ) / maximum(abs, λ) < 8.0e-10
-#md ## true
 #-
 1.0e-7 < maximum(real, λ) < 5.0e-7
-#md ## true
 
 # Interestingly, if we add dissipation by switching to the `flux_lax_friedrichs` at the interfaces,
 # the maximal real part of the eigenvalues increases.
@@ -60,10 +57,8 @@ J = jacobian_ad_forward(semi);
 scatter!(real.(λ), imag.(λ));
 
 λ = eigvals(J); round(maximum(real, λ) / maximum(abs, λ), sigdigits=2)
-#md ## 2.1e-5
 #-
 round(maximum(real, λ), sigdigits=2)
-#md ## 0.0057
 
 # However, we should be careful when using this analysis, since the eigenvectors are not necessarily
 # well-conditioned.
@@ -72,7 +67,6 @@ round(maximum(real, λ), sigdigits=2)
 λ, V = eigen(J);
 
 round(cond(V), sigdigits=2)
-#md ## 1.8e6
 
 # In one space dimension, the situation is a bit different.
 
@@ -92,15 +86,12 @@ J = jacobian_ad_forward(semi);
 scatter(real.(λ), imag.(λ));
 
 1.0e-16 < maximum(real, λ) / maximum(abs, λ) < 6.0e-16
-#md ## true
 #-
 1.0e-12 < maximum(real, λ) < 6.0e-12
-#md ## true
 #-
 λ, V = eigen(J);
 
 200 < cond(V) < 300
-#md ## true
 
 # If we add dissipation, the maximal real part is still approximately zero.
 
@@ -117,16 +108,13 @@ scatter!(real.(λ), imag.(λ));
 
 λ = eigvals(J);
 
-1.0e-18 < maximum(real, λ) / maximum(abs, λ) < 1.0e-16
-#md ## true
+-1.0e-16 < maximum(real, λ) / maximum(abs, λ) < 1.0e-16
 #-
-5.0e-14 < maximum(real, λ) < 7.0e-13
-#md ## true
+5.0e-13 < maximum(real, λ) < 7.0e-13
 #-
 λ, V = eigen(J);
 
-90_000 < cond(V) < 100_000
-#md ## true
+80_000 < cond(V) < 100_000
 
 # Note that the condition number of the eigenvector matrix increases but is still smaller than for the
 # example in 2D.
@@ -149,12 +137,11 @@ mesh = TreeMesh((-1.0, -1.0), (1.0, 1.0), initial_refinement_level=2, n_cells_ma
 
 solver = DGSEM(3, flux_lax_friedrichs, VolumeIntegralFluxDifferencing(flux_ranocha));
 
-semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_isentropic_vortex, solver)
+semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_isentropic_vortex, solver);
 #-
 u0_ode = compute_coefficients(0.0, semi);
 
 size(u0_ode)
-#md ## (1024,)
 #-
 J = ForwardDiff.jacobian((du_ode, γ) -> begin
         equations_inner = CompressibleEulerEquations2D(first(γ))
@@ -163,7 +150,6 @@ J = ForwardDiff.jacobian((du_ode, γ) -> begin
     end, similar(u0_ode), [1.4]); # γ needs to be an `AbstractArray`
 
 round.(extrema(J), sigdigits=2)
-#md ## (-5.6, 5.6)
 
 # Note that we create a semidiscretization `semi` at first to determine the state `u0_ode` around
 # which we want to perform the linearization. Next, we wrap the RHS evaluation inside a closure
@@ -176,7 +162,6 @@ round.(extrema(J), sigdigits=2)
 
 #src # euler_gamma_gradient
 norm(J[1:4:end])
-#md ## 0.0
 
 # Here, we used some knowledge about the internal memory layout of Trixi, an array of structs
 # with the conserved variables as fastest-varying index in memory.
@@ -205,15 +190,13 @@ function energy_at_final_time(k) # k is the wave number of the initial condition
     sol = solve(ode, BS3(), save_everystep=false)
     Trixi.integrate(energy_total, sol.u[end], semi)
 end
-#md ## energy_at_final_time (generic function with 1 method)
 #-
 k_values = range(0.9, 1.1, length=101)
-#md ## 0.9:0.002:1.1
 #-
 plot(k_values, energy_at_final_time.(k_values), label="Energy")
-#md # ![tutorial_totalenergy](https://user-images.githubusercontent.com/74359358/126673315-15fc87a9-d236-4216-876f-5f1d3219595a.png)
+#src # ![tutorial_totalenergy](https://user-images.githubusercontent.com/74359358/126673315-15fc87a9-d236-4216-876f-5f1d3219595a.png)
 
-# You should see a plot of a curve that resembles a parabola with local maximum around `k = 1.0`.
+# You see a plot of a curve that resembles a parabola with local maximum around `k = 1.0`.
 # Why's that? Well, the domain is fixed but the wave number changes. Thus, if the wave number is
 # not chosen as an integer, the initial condition will not be a smooth periodic function in the
 # given domain. Hence, the dissipative surface flux (`flux_lax_friedrichs` in this example)
@@ -225,7 +208,6 @@ plot(k_values, energy_at_final_time.(k_values), label="Energy")
 
 #src # advection_differentiate_simulation
 round(ForwardDiff.derivative(energy_at_final_time, 1.0), sigdigits=2)
-#md ## 1.4e-5
 
 # This is rather small and we can treat it as zero in comparison to the value of this derivative at
 # other wave numbers `k`.
@@ -242,7 +224,6 @@ plot(k_values, dk_values, label="Derivative")
 round(ForwardDiff.derivative(
         k -> Trixi.ForwardDiff.derivative(energy_at_final_time, k), 1.0),
       sigdigits=2)
-#md ## -0.9
 
 # Having seen this application, let's break down what happens step by step.
 
@@ -263,8 +244,6 @@ end
 
 k = 1.0
 round(ForwardDiff.derivative(energy_at_final_time, k), sigdigits=2)
-#md ## 1.4e-5
-
 
 # When calling `ForwardDiff.derivative(energy_at_final_time, k)` with `k=1.0`, ForwardDiff.jl
 # will basically use the chain rule and known derivatives of existing basic functions
@@ -279,7 +258,7 @@ round(ForwardDiff.derivative(energy_at_final_time, k), sigdigits=2)
 # The first step in this example creates some basic ingredients of our simulation.
 equations = LinearScalarAdvectionEquation2D(1.0, -0.3)
 mesh = TreeMesh((-1.0, -1.0), (1.0, 1.0), initial_refinement_level=3, n_cells_max=10^4)
-solver = DGSEM(3, flux_lax_friedrichs)
+solver = DGSEM(3, flux_lax_friedrichs);
 
 # These do not have internal caches storing intermediate values of the numerical
 # solution, so we do not need to adapt them. In fact, we could also define them
@@ -290,7 +269,7 @@ solver = DGSEM(3, flux_lax_friedrichs)
 initial_condition = (x, t, equation) -> begin
     x_trans = Trixi.x_trans_periodic_2d(x - equation.advectionvelocity * t)
     return SVector(sinpi(k * sum(x_trans)))
-end
+end;
 # as a closure capturing the wave number `k` passed to `energy_at_final_time`.
 # If you call `energy_at_final_time(1.0)`, `k` will be a `Float64`. Thus, the
 # return values of `initial_condition` will be `SVector`s of `Float64`s. When
@@ -303,13 +282,13 @@ end
 # need to tell Trixi to allow `ForwardDiff.Dual` numbers in these caches. That's what
 # the keyword argument `uEltype=typeof(k)` in
 semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition, solver,
-                                    uEltype=typeof(k))
+                                    uEltype=typeof(k));
 
 # does. This is basically the only part where you need to modify your standard Trixi
 # code to enable automatic differentiation. From there on, the remaining steps
 ode = semidiscretize(semi, (0.0, 1.0))
 sol = solve(ode, BS3(), save_everystep=false)
-Trixi.integrate(energy_total, sol.u[end], semi)
+round(Trixi.integrate(energy_total, sol.u[end], semi), sigdigits=5)
 
 # do not need any modifications since they are sufficiently generic (and enough effort
 # has been spend to allow general types inside these calls).
@@ -342,7 +321,7 @@ ode = semidiscretize(semi, (0.0, 1.5));
 sol = solve(ode, BS3(), save_everystep=false);
 
 plot(sol)
-#md # ![tutorial_measurements1](https://user-images.githubusercontent.com/12693098/114027260-78ca8300-9877-11eb-88d4-f93c9bc55d0b.png)
+#src # ![tutorial_measurements1](https://user-images.githubusercontent.com/12693098/114027260-78ca8300-9877-11eb-88d4-f93c9bc55d0b.png)
 #src # ![tutorial_measurements1b](https://user-images.githubusercontent.com/74359358/126673421-f818d8e9-9968-435e-9008-598ed52e4d21.png)
 
 # You should see a plot like this, where small error bars are shown around
@@ -376,8 +355,7 @@ J_fd = jacobian_fd(semi);
 
 J_ad = jacobian_ad_forward(semi);
 
-round(norm(J_fd - J_ad) / size(J_fd, 1), sigdigits=2)
-#md ## 6.7e-7
+norm(J_fd - J_ad) / size(J_fd, 1) < 7.0e-7
 
 # This discrepancy is of the expected order of magnitude for central finite difference approximations.
 
@@ -411,11 +389,9 @@ semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_convergen
 A, b = linear_structure(semi);
 
 size(A), size(b)
-#md ## ((256, 256), (256,))
 #-
 λ = eigvals(Matrix(A));
 
 scatter(real.(λ), imag.(λ));
 
 λ = eigvals(Matrix(A)); maximum(real, λ) / maximum(abs, λ) < 1.0e-15
-#md ## true
