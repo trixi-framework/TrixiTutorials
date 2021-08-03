@@ -64,7 +64,7 @@ semi = SemidiscretizationHyperbolic(mesh, equation, initial_condition_sine, solv
   
 ## Create ODE problem with given time span
 tspan = (0.0, 0.09)
-ode = semidiscretize(semi, tspan)
+ode = semidiscretize(semi, tspan);
 
 # We wrap the return value of the `initial_condition_sine` inside an `SVector` since that's the approach
 # used in Trixi.jl also for systems of equations. We need to index the spatial coordinate `x[1]`,
@@ -83,7 +83,8 @@ sol = solve(ode, SSPRK43(),
             save_everystep=false, callback=callbacks, maxiters=1e5);
   
 ## Print the timer summary
-summary_callback()
+summary_callback();
+#src TODO printing summary?
 
 # That's it, you ran your first simulation using your new equation with Trixi! Now,
 # we can plot the solution at the final time using Plots.jl.
@@ -91,7 +92,7 @@ summary_callback()
 using Plots
 plot(sol)
 #src # ![tutorial_adding_new_equations_plot1](https://user-images.githubusercontent.com/12693098/111651488-91122980-8806-11eb-848c-af09f3af234c.png)
-#md # ![tutorial_adding_new_equations_plot1b](https://user-images.githubusercontent.com/74359358/126663757-b8fb3ecb-72c8-4246-ab64-2bb4dbdf621a.png)
+#src # ![tutorial_adding_new_equations_plot1b](https://user-images.githubusercontent.com/74359358/126663757-b8fb3ecb-72c8-4246-ab64-2bb4dbdf621a.png)
 
 # You can already see that discontinuities will develop and oscillations start to
 # occur around steep parts of the wave. That's expected from our central discretization.
@@ -118,7 +119,7 @@ sol = solve(ode, SSPRK43(),
 summary_callback()
 plot!(sol)
 #src # ![tutorial_adding_new_equations_plot2](https://user-images.githubusercontent.com/12693098/111651740-c9196c80-8806-11eb-9a02-c0420eecf4fc.png)
-#md # ![tutorial_adding_new_equations_plot2b](https://user-images.githubusercontent.com/74359358/126664312-e2f2fc93-42b0-4082-a009-b4268b15ff21.png)
+#src # ![tutorial_adding_new_equations_plot2b](https://user-images.githubusercontent.com/74359358/126664312-e2f2fc93-42b0-4082-a009-b4268b15ff21.png)
 
 # You can see that there are fewer oscillations, in particular around steep edges.
 # Now let's increase the final time (and also the spatial resolution).
@@ -130,7 +131,6 @@ sol = solve(ode, SSPRK43(),
             save_everystep=false, callback=callbacks, maxiters=1e5);
 plot(sol)
 #src # ![tutorial_adding_new_equations_plot3](https://user-images.githubusercontent.com/12693098/111651770-cfa7e400-8806-11eb-887d-d8f6282cb6ef.png)
-#md # ![tutorial_adding_new_equations_plot3b](https://user-images.githubusercontent.com/74359358/126664439-0ad21d8a-f0c9-4951-9453-f2b672a0d3f6.png)
 
 # You can observe that nonclassical shocks develop and are stable under grid refinement,
 # e.g. for `initial_refinement_level=12`. In this case, these nonclassical shocks
@@ -151,7 +151,6 @@ sol = solve(ode, SSPRK43(),
             save_everystep=false, callback=callbacks, maxiters=1e5);
 plot(sol)
 #src # ![tutorial_adding_new_equations_plot4](https://user-images.githubusercontent.com/12693098/111651788-d46c9800-8806-11eb-8cc7-9323527b02a2.png)
-#md # ![tutorial_adding_new_equations_plot4b](https://user-images.githubusercontent.com/74359358/126664681-9de2999b-b0c0-46ac-a16b-092b1e2a82e9.png)
 
 # Possible next steps could be
 # - to define `Trixi.max_abs_speeds(u, equations::CubicEquation) = 3 * u[1]^2`
@@ -232,4 +231,4 @@ plot(sol);
 semi = remake(semi, solver=DGSEM(3, flux_godunov, VolumeIntegralFluxDifferencing(flux_ec)))
 ode = semidiscretize(semi, (0.0, 0.5))
 sol = solve(ode, SSPRK43(), save_everystep=false);
-plot(sol)
+plot(sol);
