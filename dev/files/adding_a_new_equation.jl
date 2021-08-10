@@ -83,8 +83,8 @@ sol = solve(ode, SSPRK43(),
             save_everystep=false, callback=callbacks, maxiters=1e5);
   
 ## Print the timer summary
-summary_callback();
-#src TODO printing summary?
+summary_callback()
+#src TODO summary_callback() is printing summary automatically (even with ;)
 
 # That's it, you ran your first simulation using your new equation with Trixi! Now,
 # we can plot the solution at the final time using Plots.jl.
