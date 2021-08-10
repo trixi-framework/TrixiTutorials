@@ -15,5 +15,5 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Trixi = "a7f1ee26-1774-49b1-8366-f1abc58fbfcb"
 
 [compat]
-Trixi = "0.3.43"
+Trixi = "= 0.3.43"
 julia = "1.6"

@@ -73,7 +73,7 @@ pages = Any["Introduction" => "index.md"]
 
 # Create markdown and notebook files for tutorials.
 for (i, (title, filename)) in enumerate(files)
-    # Several files of one topic are created seperately and pushed to pages together.
+    # Several files of one topic are created seperately and pushed to `pages` together.
     if filename isa Vector
         vector = []
         for j in 1:length(filename)
