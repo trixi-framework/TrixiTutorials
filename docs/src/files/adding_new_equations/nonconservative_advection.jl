@@ -7,7 +7,7 @@
 # \partial_t u(t,x) + a(x) \partial_x u(t,x) = 0
 # ```
 # in a periodic domain in one space dimension. In Trixi.jl, such a mathematical model
-# is encoded as a subtype of [`Trixi.AbstractEquations`](@trixi-ref).
+# is encoded as a subtype of [`AbstractEquations`](@trixi-ref).
 
 # ## Basic setup
 
