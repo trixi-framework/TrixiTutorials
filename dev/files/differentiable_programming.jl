@@ -324,12 +324,14 @@ plot(sol)
 #src # ![tutorial_measurements1](https://user-images.githubusercontent.com/12693098/114027260-78ca8300-9877-11eb-88d4-f93c9bc55d0b.png)
 #src # ![tutorial_measurements1b](https://user-images.githubusercontent.com/74359358/126673421-f818d8e9-9968-435e-9008-598ed52e4d21.png)
 
-# You should see a plot like this, where small error bars are shown around
-# the extrema and larger error bars are shown in the remaining parts. This result
-# is in accordance with expectations. Indeed, the uncertain propagation speed will
-# affect the extrema less since the local variation of the solution is relatively
-# small there. In contrast, the local variation of the solution is large around
-# the turning points of the sine wave, so the uncertainties will be relatively
+#md # You see small error bars around the extrema and larger error bars are shown
+#md # in the remaining parts.
+#nb # You should see a plot, where small error bars are shown around
+#nb # the extrema and larger error bars are shown in the remaining parts
+# This result is in accordance with expectations. Indeed, the uncertain propagation
+# speed will affect the extrema less since the local variation of the solution is
+# relatively small there. In contrast, the local variation of the solution is large
+# around the turning points of the sine wave, so the uncertainties will be relatively
 # large there.
 
 # All this is possible due to allowing generic types and having good abstractions
