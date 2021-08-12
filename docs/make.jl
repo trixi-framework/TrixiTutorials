@@ -31,7 +31,8 @@ end
 #   "title" => ["subtitle 1" => ("folder 1", "filename 1.jl"),
 #               "subtitle 2" => ("folder 2", "filename 2.jl")]
 files = [
-    "Adding a new equation" => "adding_a_new_equation.jl",
+    "Adding a new equation" => ["Scalar conservation law" => ("adding_new_equations", "cubic_conservation_law.jl"),
+                                "Nonconservative equation" => ("adding_new_equations", "nonconservative_advection.jl")],
     "Differentiable programming" => "differentiable_programming.jl",
     ]
 
