@@ -107,7 +107,7 @@ makedocs(
     # Explicitly specify documentation structure
     pages = pages,
     linkcheck = true, # checks external links using curl
-    strict = get(ENV, "CI", nothing) == "true"
+    strict = false
     # to make the GitHub action fail when doctests fail, see https://github.com/neuropsychology/Psycho.jl/issues/34
 )
 
