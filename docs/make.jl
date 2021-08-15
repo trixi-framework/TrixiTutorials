@@ -12,9 +12,9 @@ function create_files(title, file; folder="")
         notebook_filename = "$folder/$(splitext(file)[1]).ipynb"
     end
 
-    binder_badge   = "# [![]($binder_logo)]($binder_url/$notebook_filename))"
-    nbviewer_badge = "# [![]($nbviewer_logo)]($nbviewer_url/$notebook_filename))"
-    download_badge = "# [![]($download_logo)]($download_url/$notebook_filename))"
+    binder_badge   = "# [![]($binder_logo)]($binder_url/$notebook_filename)"
+    nbviewer_badge = "# [![]($nbviewer_logo)]($nbviewer_url/$notebook_filename)"
+    download_badge = "# [![]($download_logo)]($download_url/$notebook_filename)"
     
     # Generate notebooks
     function preprocess_notebook(content)

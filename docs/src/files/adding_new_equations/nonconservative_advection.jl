@@ -156,13 +156,12 @@ callbacks = CallbackSet(summary_callback, analysis_callback);
 sol = solve(ode, Tsit5(), abstol=1.0e-6, reltol=1.0e-6,
             save_everystep=false, callback=callbacks);
 summary_callback()
-
-# As expected, the new error is roughly reduced by a factor of 16, corresponding
-# to an experimental order of convergence of 4 (for polynomials of degree 3).
-
+#-
 error_2 = analysis_callback(sol).l2 |> first
 #-
 error_1 / error_2
+# As expected, the new error is roughly reduced by a factor of 16, corresponding
+# to an experimental order of convergence of 4 (for polynomials of degree 3).
 
 
 
