@@ -8,18 +8,21 @@
     
 # There are tutorials for the following topics:
 
-# ### [Adding a new equation](@ref cubic_conservation_law)
-# #### [Scalar conservation law](@ref cubic_conservation_law) [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/adding_new_equations/cubic_conservation_law.ipynb) [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/adding_new_equations/cubic_conservation_law.ipynb)
+# ### 1 Adding a new equation
+# #### [1.1 Scalar conservation law](@ref cubic_conservation_law)
+#src # [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/adding_new_equations/cubic_conservation_law.ipynb) [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/adding_new_equations/cubic_conservation_law.ipynb)
 #-
 # In this tutorial, it is explained how a new equation can be added using the example of the cubic conservation law.
 # First, the equation is defined using a `struct` `CubicEquation` and the physical flux. Then, the corresponding
 # standard setup in Trixi.jl (`mesh`, `solver`, `semi` and `ode`) is build and the ODE problem is solved by OrdinaryDiffEq's `solve` method.
 
-# #### [Nonconservative advection](@ref nonconservative_advection) [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/adding_new_equations/nonconservative_advection.ipynb) [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/adding_new_equations/nonconservative_advection.ipynb)
+# #### [1.2 Nonconservative advection](@ref nonconservative_advection)
+#src # [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/adding_new_equations/nonconservative_advection.ipynb) [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/adding_new_equations/nonconservative_advection.ipynb)
 #-
 # In this part, the nonconservative linear advection equation is implemented. Then, two simulations with different level of refinement are executed and the resulting errors are compared.
 
-# ### [Differentiable programming](@ref differentiable_programming) [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/differentiable_programming.ipynb) [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/differentiable_programming.ipynb)
+# ### [2 Differentiable programming](@ref differentiable_programming)
+#src # [![](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trixi-framework/TrixiTutorials/gh-pages?filepath=dev/notebooks/differentiable_programming.ipynb) [![](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/trixi-framework/TrixiTutorials/blob/gh-pages/dev/notebooks/differentiable_programming.ipynb)
 #-
 # This part deals with some basic differentiable programming topics. For example, a Jacobian, its eigenvalues and
 # a curve of total energy (through the simulation) are calculated and plotted for a few semidiscretizations.
