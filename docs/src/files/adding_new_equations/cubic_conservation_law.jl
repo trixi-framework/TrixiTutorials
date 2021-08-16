@@ -166,69 +166,71 @@ plot(sol)
 # To sum up, here is the complete code that we used (without the [`SummaryCallback`](@trixi-docs:callbacks/#callbacks-id)
 # since that creates a lot of unnecessary output in the doctests of this tutorial).
 
-## Define new physics
-module CubicConservationLaw
-
-  using Trixi
-
-  struct CubicEquation <: Trixi.AbstractEquations{1 #= number of spatial dimensions =#,
-                                                  1 #= number of primary variables, i.e. scalar =#}
-  end
-
-  @inline Trixi.flux(u, orientation, equation::CubicEquation) = u.^3
-  Trixi.varnames(_, ::CubicEquation) = ("scalar",)
-
-  @inline Trixi.flux_godunov(u_ll, u_rr, orientation, equation::CubicEquation) = flux(u_ll, orientation, equation)
-  @inline function Trixi.flux_ec(u_ll, u_rr, orientation, equation::CubicEquation)
-    return SVector(0.25 * (u_ll[1]^3 + u_ll[1]^2 * u_rr[1] + u_ll[1] * u_rr[1]^2 + u_rr[1]^3))
-  end
-
-end # module
-  
-  
-## Create a simulation setup
-import .CubicConservationLaw
-using Trixi
-using OrdinaryDiffEq
-using Plots
-  
-equation = CubicConservationLaw.CubicEquation()
-  
-initial_condition_sine(x, t, equation::CubicConservationLaw.CubicEquation) = SVector(sinpi(x[1]))
-  
-mesh = TreeMesh(-1.0, 1.0, # min/max coordinates
-                initial_refinement_level=4,
-                n_cells_max=10^4)
-  
-solver = DGSEM(3 #= polynomial degree =#, flux_central)
-  
-semi = SemidiscretizationHyperbolic(mesh, equation, initial_condition_sine, solver)
-  
-## Create ODE problem with given time span
-tspan = (0.0, 0.1)
-ode = semidiscretize(semi, tspan)
-  
-## OrdinaryDiffEq's `solve` method evolves the solution in time and executes the passed callbacks
-sol = solve(ode, SSPRK43(), save_everystep=false);
-plot(sol);
-  
-  
-## A new setup with dissipation
-semi = remake(semi, solver=DGSEM(3, flux_godunov))
-ode = semidiscretize(semi, tspan)
-sol = solve(ode, SSPRK43(), save_everystep=false);
-plot!(sol);
-  
-  
-## A larger final time: Nonclassical shocks develop (you can even increase the refinement to 12)
-semi = remake(semi, mesh=TreeMesh(-1.0, 1.0, initial_refinement_level=8, n_cells_max=10^5))
-ode = semidiscretize(semi, (0.0, 0.5))
-sol = solve(ode, SSPRK43(), save_everystep=false);
-plot(sol);
-  
-  
-## Let's use a provably entropy-dissipative semidiscretization
-semi = remake(semi, solver=DGSEM(3, flux_godunov, VolumeIntegralFluxDifferencing(flux_ec)))
-ode = semidiscretize(semi, (0.0, 0.5))
-sol = solve(ode, SSPRK43(), save_everystep=false);
-plot(sol);
+# ````julia
+# # Define new physics
+# module CubicConservationLaw
+#
+#   using Trixi
+#
+#   struct CubicEquation <: Trixi.AbstractEquations{1 #= number of spatial dimensions =#,
+#                                                   1 #= number of primary variables, i.e. scalar =#}
+#   end
+#
+#   @inline Trixi.flux(u, orientation, equation::CubicEquation) = u.^3
+#   Trixi.varnames(_, ::CubicEquation) = ("scalar",)
+#
+#   @inline Trixi.flux_godunov(u_ll, u_rr, orientation, equation::CubicEquation) = flux(u_ll, orientation, equation)
+#   @inline function Trixi.flux_ec(u_ll, u_rr, orientation, equation::CubicEquation)
+#     return SVector(0.25 * (u_ll[1]^3 + u_ll[1]^2 * u_rr[1] + u_ll[1] * u_rr[1]^2 + u_rr[1]^3))
+#   end
+#
+# end # module
+#  
+#  
+# # Create a simulation setup
+# import .CubicConservationLaw
+# using Trixi
+# using OrdinaryDiffEq
+# using Plots
+#
+# equation = CubicConservationLaw.CubicEquation()
+#
+# initial_condition_sine(x, t, equation::CubicConservationLaw.CubicEquation) = SVector(sinpi(x[1]))
+#
+# mesh = TreeMesh(-1.0, 1.0, # min/max coordinates
+#                 initial_refinement_level=4,
+#                 n_cells_max=10^4)
+#
+# solver = DGSEM(3 #= polynomial degree =#, flux_central)
+#
+# semi = SemidiscretizationHyperbolic(mesh, equation, initial_condition_sine, solver)
+#  
+# # Create ODE problem with given time span
+# tspan = (0.0, 0.1)
+# ode = semidiscretize(semi, tspan)
+#  
+# # OrdinaryDiffEq's `solve` method evolves the solution in time and executes the passed callbacks
+# sol = solve(ode, SSPRK43(), save_everystep=false);
+# plot(sol);
+#
+#
+# # A new setup with dissipation
+# semi = remake(semi, solver=DGSEM(3, flux_godunov))
+# ode = semidiscretize(semi, tspan)
+# sol = solve(ode, SSPRK43(), save_everystep=false);
+# plot!(sol);
+#
+#
+# # A larger final time: Nonclassical shocks develop (you can even increase the refinement to 12)
+# semi = remake(semi, mesh=TreeMesh(-1.0, 1.0, initial_refinement_level=8, n_cells_max=10^5))
+# ode = semidiscretize(semi, (0.0, 0.5))
+# sol = solve(ode, SSPRK43(), save_everystep=false);
+# plot(sol);
+#
+#
+# # Let's use a provably entropy-dissipative semidiscretization
+# semi = remake(semi, solver=DGSEM(3, flux_godunov, VolumeIntegralFluxDifferencing(flux_ec)))
+# ode = semidiscretize(semi, (0.0, 0.5))
+# sol = solve(ode, SSPRK43(), save_everystep=false);
+# plot(sol);
+# ````
