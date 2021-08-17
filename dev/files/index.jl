@@ -1,4 +1,4 @@
-# # Tutorials für Trixi.jl
+# # Tutorials for Trixi.jl
 
 # This repository contains a tutorial section for [Trixi.jl](https://github.com/trixi-framework/Trixi.jl),
 # with interactive step-by-step explanations via [Binder](https://mybinder.org).
